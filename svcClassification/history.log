@@ -1,0 +1,28 @@
+11111:
+              precision    recall  f1-score   support
+
+        -1.0       0.99      0.99      0.99        76
+         1.0       0.98      0.98      0.98        47
+
+    accuracy                           0.98       123
+   macro avg       0.98      0.98      0.98       123
+weighted avg       0.98      0.98      0.98       123
+
+[[75  1]
+ [ 1 46]]
+22222
+              precision    recall  f1-score   support
+
+        -1.0       0.99      0.99      0.99        76
+         1.0       0.98      0.98      0.98        47
+
+    accuracy                           0.98       123
+   macro avg       0.98      0.98      0.98       123
+weighted avg       0.98      0.98      0.98       123
+
+[[75  1]
+ [ 1 46]]
+SVC(C=8, cache_size=200, class_weight='balanced', coef0=0.0,
+    decision_function_shape='ovr', degree=3, gamma=0.001953125, kernel='rbf',
+    max_iter=-1, probability=True, random_state=None, shrinking=True, tol=0.001,
+    verbose=False)
