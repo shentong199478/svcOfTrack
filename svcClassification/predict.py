@@ -1,16 +1,17 @@
 import sys
 import os
 last_path = os.path.dirname(os.getcwd())
-sys.path.append(os.path.join(last_path,'getdata'))
-from hbase_zhengshi import *
-from drawmap.map import *
-
-
-
-from sklearn.externals import joblib
+sys.path.append(os.path.join(last_path,'svcOfTrack'))
+dangqian_path = os.getcwd()
+sys.path.append(os.path.join(os.path.join(dangqian_path,'components'),'svcOfTrack'))
+sys.path.append(os.path.join(os.path.join(os.path.join(dangqian_path,'components'),'svcOfTrack'),'svcClassification'))
+from getData import *
+#from drawmap.map import *
+import joblib
 import  re
 import math
 import time
+import numpy as np
 
 
 class SvcClassifition:
@@ -24,13 +25,13 @@ class SvcClassifition:
 
         # 预测
     def predict(self,X_test):
-        # X_test = self.ss.transform(X_test)  # 数据标准化
+        # X_test = self.ss.transform(X_test)  # 数据标准�?
         Y_predict = self.clf.predict(X_test)  # 预测
         Y_predict_proba = self.clf.predict_proba(X_test)
         return Y_predict,Y_predict_proba
 
     def predict_proba(self,X_test):
-        X_test = self.ss.transform(X_test)  # 数据标准化
+        X_test = self.ss.transform(X_test)  # 数据标准�?
         Y_predict = self.lr.predict_proba(X_test)  # 预测
         return Y_predict
 
@@ -192,19 +193,13 @@ class SvcClassifition:
                         res_dic['predict'].append(1)
                     else:
                         res_dic['predict'].append(-1)
-            # if i in [0, 1, 2, 3, 4, 5]:
-            #     print('*', i, '*')
-            #     print(res_dic['feature'][i])
 
         flag = 0
         for i in range(last_true_index2+1,count):
             features = self.get_feature(res_dic['feature'][last_true_index1],res_dic['feature'][last_true_index2],res_dic['feature'][i])
             a,b = self.predict(np.array([features]))
             a = int(a[0])
-            # if a == 1 and b[0][1] <= 0.6:
-            #     a = -1
-            result = a if int(res_dic['feature'][i]['sog']) > 1 and int(res_dic['feature'][i]['time'] - res_dic['feature'][i-1]['time'] ) < 7200 and int(res_dic['feature'][i][\
-                'source']) != 9046 else -1
+            result = a if int(res_dic['feature'][i]['sog']) > 1 and int(res_dic['feature'][i]['time'] - res_dic['feature'][i-1]['time'] ) < 7200 and int(res_dic['feature'][i]['source']) != 9046  and i != count-1 else -1
             if result == 1:
                 flag += 1
             else:
@@ -217,14 +212,7 @@ class SvcClassifition:
                     last_true_index1 = i-2
                     last_true_index2 = i-1
             else:
-                res_dic['predict'].append(result) #
-            # if i in [1,2,3,4,5,6]:
-            #     if features[6] >=0:
-            #         print('*',i,'*')
-            #         print(a,b)
-            #         print(features)
-            #         print(time.strftime("%Y-%m-%d %H:%M:%S",  time.localtime(res_dic['feature'][i]['time'])))
-            #         print(res_dic['feature'][i],'***',res_dic['feature'][last_true_index2],'***',res_dic['feature'][last_true_index1])
+                res_dic['predict'].append(result)
             if result == -1:
                 last_true_index1 = last_true_index2
                 last_true_index2 = i
@@ -234,13 +222,15 @@ class SvcClassifition:
 if __name__ == '__main__':
     import pandas as pd
 
+    sys.path.append(os.path.join(last_path, 'getData'))
+    from getData.hbase_zhengshi import HbaseZS
+
+
+
     m = Map()
     hbase_out = HbaseZS()
     last_path = os.path.dirname(os.getcwd())
     model_path = os.path.join(last_path,r"model\1226_1.model")
-    # mmsi_list = list(pd.read_excel(r'D:\shentong\svcOfTrack\data\mmsi.xlsx')['mmsi'])
-    # mmsi_list1 = list(pd.read_excel(r'D:\shentong\svcOfTrack\data\mmsi总.xlsx')['mmsi'])
-    #
     svc = SvcClassifition(model_path)
     mmsi_list = [477752100, 477752200, 477181700, 477942400, 477454300, 477548400, 477167300, 414436000, 477150500, 413828000, 565003000, 574375000, 419001327, 477686500,
             372632000, 636015455, 538004459, 564290000, 538004367, 538004243, 477264400, 477435100, 353242000, 563077300,419001333]
@@ -249,7 +239,7 @@ if __name__ == '__main__':
 
     d = list()
     for i in mmsi_list:
-        # i =  413203310
+        i =  564290000
 
         # if i in mmsi_list:
         #     continue
@@ -263,13 +253,14 @@ if __name__ == '__main__':
             res_list.append([row['mmsi'],row['source'],row['cog'],row['latitude'],row['longitude'],row['rot'],row['sog'],row['time'],row['trueHeading']])
             point_list.append([float(row['longitude']),float(row['latitude'])])
         point_dic = svc.predict_list(res_list)
-        start =0
-        end = len(res)
+        print(point_dic)
+        start =55
+        end = 65
         index_list = list(i[0] for i in list(enumerate(point_dic['predict'])) if i[1] == 1)
         zhixin_list = list()
         if index_list:
             print(i)
-        #     print(index_list)
+            print(index_list)
         for j in index_list:
             print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(res_list[j][7]))))
         # if len(index_list) > 8:
@@ -291,12 +282,13 @@ if __name__ == '__main__':
         #     if end >= len(res):
         #         break
         # print(index_list)
-        # c = []
-        # for k in range(start, end):
-        #     if k in index_list:
-        #         c.append(k - start)
-        # m.draw_point(point_list[start:end], c)
-        # m.draw_line(point_list[start:end], c)
-        # m.show()
+        c = []
+        for k in range(start, end):
+            if k in index_list:
+                c.append(k - start)
+        m.draw_point(point_list[start:end], c)
+        m.draw_line(point_list[start:end], c)
+        m.show()
         # break
+        break
 

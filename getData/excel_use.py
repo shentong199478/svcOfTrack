@@ -41,21 +41,4 @@ class ExcelTools(object):
                 print(worksheet.cell_value(i, j), "\t", end="")  # 逐行逐列读取数据
 
 if __name__ == '__main__':
-    book_name_xls    = 'xls格式测试工作簿.xls'
-
-    sheet_name_xls = 'xls格式测试表'
-
-    value_title = [["姓名", "性别", "年龄", "城市", "职业"], ]
-
-    value1 = [["张三", "男", "19", "杭州", "研发工程师"],
-        ["李四", "男", "22", "北京", "医生"],
-        ["王五", "女", "33", "珠海", "出租车司机"], ]
-
-    value2 = [["Tom", "男", "21", "西安", "测试工程师"],
-        ["Jones", "女", "34", "上海", "产品经理"],
-        ["Cat", "女", "56", "上海", "教师"], ]
-
-    write_excel_xls(book_name_xls, sheet_name_xls, value_title)
-    write_excel_xls_append(book_name_xls, value1)
-    write_excel_xls_append(book_name_xls, value2)
-    read_excel_xls(book_name_xls)
+    pass

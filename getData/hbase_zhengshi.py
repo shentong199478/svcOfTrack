@@ -4,7 +4,7 @@ from hd_utils.time_util import *
 from hd_utils.hbase_util  import HbaseShipPos
 import string
 import time,datetime
-from excel_use import *
+from .excel_use import *
 
 
 
@@ -29,8 +29,8 @@ class HbaseZS:
         bg = threeDayAgo.strftime("%Y-%m-%d %H:%M:%S")
         # bg = '2019-12-14 00:00:00'
         # ed = '2019-12-18 00:00:00'  24-27
-        bg = '2019-12-01 00:00:00'
-        ed = '2019-12-10 00:00:00'
+        bg = '2019-12-30 00:00:00'
+        ed = '2019-12-31 00:00:00'
         bg = BTime.from_str(bg)
         ed = BTime.from_str(ed)
 
@@ -79,8 +79,8 @@ if __name__ == '__main__':
     #
     # bg = time_util.BTime.from_str("2019-12-11 13:14:00")
     # ed = time_util.BTime.from_str("2019-12-12 11:00:00")
-    bg = time_util.BTime.from_str("2019-12-28 00:00:00")
-    ed = time_util.BTime.from_str("2019-12-30 00:00:00")
+    bg = time_util.BTime.from_str("2019-12-11 20:14:00")
+    ed = time_util.BTime.from_str("2019-12-12 16:00:00")
     # # print(bg)
     # # print(type(bg))
     # ed = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
